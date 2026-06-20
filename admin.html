@@ -36,6 +36,14 @@
     padding: 12px 14px; color: var(--white); font-size: 0.9rem; outline: none;
   }
   .form-group input:focus { border-color: var(--cyan); }
+  .password-wrap { position: relative; }
+  .password-wrap input { padding-right: 44px; }
+  .password-toggle {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: var(--white-dim);
+    font-size: 0.78rem; letter-spacing: 0.03em; padding: 4px;
+  }
+  .password-toggle:hover { color: var(--cyan); }
   .btn-login {
     width: 100%; padding: 13px; background: var(--cyan); color: var(--navy);
     border: none; border-radius: 6px; font-weight: 700; font-size: 0.9rem;
@@ -61,10 +69,32 @@
   .stat-row { display: flex; gap: 14px; margin-bottom: 30px; flex-wrap: wrap; }
   .stat-box {
     flex: 1; min-width: 130px; background: var(--navy2); border: 1px solid var(--border);
-    border-radius: 10px; padding: 16px; text-align: center;
+    border-radius: 10px; padding: 16px; text-align: center; cursor: pointer; transition: border-color 0.2s;
   }
+  .stat-box:hover { border-color: var(--cyan); }
+  .stat-box.active-filter { border-color: var(--cyan); background: rgba(0,200,248,0.08); }
   .stat-box .num { font-family: 'Orbitron', monospace; font-size: 1.6rem; font-weight: 900; color: var(--cyan); }
   .stat-box .lbl { font-size: 0.72rem; color: var(--white-dim); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .filter-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-tab {
+    background: var(--navy2); border: 1px solid var(--border); color: var(--white-dim);
+    padding: 8px 16px; border-radius: 100px; font-size: 0.8rem; cursor: pointer;
+    transition: all 0.2s; font-family: 'Inter', sans-serif;
+  }
+  .filter-tab:hover { border-color: var(--cyan); color: var(--white); }
+  .filter-tab.active { background: var(--cyan); border-color: var(--cyan); color: var(--navy); font-weight: 600; }
+  .sort-select {
+    background: var(--navy2); border: 1px solid var(--border); color: var(--white);
+    padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; cursor: pointer;
+    font-family: 'Inter', sans-serif; outline: none;
+  }
+  .sort-select:focus { border-color: var(--cyan); }
+  .sort-select option { background: var(--navy2); }
 
   .review-row {
     background: var(--navy2); border: 1px solid var(--border); border-radius: 12px;
@@ -81,6 +111,18 @@
     border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; font-size: 0.85rem;
   }
   .reply-existing .lbl { color: var(--cyan); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 4px; }
+  .btn-edit-reply {
+    background: transparent; border: 1px solid var(--border); color: var(--cyan);
+    padding: 7px 16px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;
+    cursor: pointer; letter-spacing: 0.03em; margin-top: 4px;
+  }
+  .btn-edit-reply:hover { background: rgba(0,200,248,0.1); border-color: var(--cyan); }
+
+  .new-badge {
+    display: inline-block; background: var(--cyan); color: var(--navy);
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 100px; margin-left: 8px; vertical-align: middle;
+  }
 
   .reply-box { display: flex; flex-direction: column; gap: 10px; }
   .reply-box textarea {
@@ -115,7 +157,10 @@
     </div>
     <div class="form-group">
       <label>Password</label>
-      <input type="password" id="adminPassword" placeholder="••••••••">
+      <div class="password-wrap">
+        <input type="password" id="adminPassword" placeholder="••••••••">
+        <button type="button" class="password-toggle" onclick="togglePassword()" id="pwToggleBtn">SHOW</button>
+      </div>
     </div>
     <button class="btn-login" onclick="doLogin()">Log In</button>
     <p class="login-error" id="loginError"></p>
@@ -129,10 +174,23 @@
   </div>
 
   <div class="stat-row">
-    <div class="stat-box"><div class="num" id="statTotal">0</div><div class="lbl">Total Reviews</div></div>
-    <div class="stat-box"><div class="num" id="statAvg">0.0</div><div class="lbl">Average Rating</div></div>
-    <div class="stat-box"><div class="num" id="statReplied">0</div><div class="lbl">Replied</div></div>
-    <div class="stat-box"><div class="num" id="statPending">0</div><div class="lbl">Awaiting Reply</div></div>
+    <div class="stat-box" data-filter="all" onclick="setFilter('all')"><div class="num" id="statTotal">0</div><div class="lbl">Total Reviews</div></div>
+    <div class="stat-box" data-filter="avg-noop" onclick="setFilter('all')"><div class="num" id="statAvg">0.0</div><div class="lbl">Average Rating</div></div>
+    <div class="stat-box" data-filter="replied" onclick="setFilter('replied')"><div class="num" id="statReplied">0</div><div class="lbl">Replied</div></div>
+    <div class="stat-box" data-filter="pending" onclick="setFilter('pending')"><div class="num" id="statPending">0</div><div class="lbl">Awaiting Reply</div></div>
+  </div>
+
+  <div class="filter-row">
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all" onclick="setFilter('all')">All</button>
+      <button class="filter-tab" data-filter="new" onclick="setFilter('new')">New (24h)</button>
+      <button class="filter-tab" data-filter="pending" onclick="setFilter('pending')">Awaiting Reply</button>
+      <button class="filter-tab" data-filter="replied" onclick="setFilter('replied')">Replied</button>
+    </div>
+    <select class="sort-select" id="sortSelect" onchange="renderFilteredReviews()">
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+    </select>
   </div>
 
   <div id="reviewsList">
@@ -156,6 +214,18 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.database();
+
+  function togglePassword() {
+    const input = document.getElementById('adminPassword');
+    const btn = document.getElementById('pwToggleBtn');
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.textContent = 'HIDE';
+    } else {
+      input.type = 'password';
+      btn.textContent = 'SHOW';
+    }
+  }
 
   function doLogin() {
     const email = document.getElementById('adminEmail').value.trim();
@@ -202,68 +272,128 @@
     return new Date(ts).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
+  let allReviews = [];
+  let currentFilter = 'all';
+  const editingIds = new Set();
+
+  function setFilter(filter) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.filter === filter);
+    });
+    document.querySelectorAll('.stat-box').forEach(b => {
+      b.classList.toggle('active-filter', b.dataset.filter === filter);
+    });
+    renderFilteredReviews();
+  }
+
   function loadReviews() {
     db.ref('reviews').on('value', (snap) => {
       const data = snap.val();
-      const listEl = document.getElementById('reviewsList');
+      allReviews = data ? Object.entries(data).map(([id, r]) => ({ id, ...r })) : [];
+      updateStats();
+      renderFilteredReviews();
+    });
+  }
 
-      if (!data) {
-        listEl.innerHTML = '<div class="empty-state">No reviews yet.</div>';
-        document.getElementById('statTotal').textContent = '0';
-        document.getElementById('statAvg').textContent = '0.0';
-        document.getElementById('statReplied').textContent = '0';
-        document.getElementById('statPending').textContent = '0';
-        return;
-      }
+  function updateStats() {
+    const total = allReviews.length;
+    const avg = total ? (allReviews.reduce((s, r) => s + (r.rating || 0), 0) / total) : 0;
+    const replied = allReviews.filter(r => r.adminReply && r.adminReply.trim()).length;
 
-      const entries = Object.entries(data).map(([id, r]) => ({ id, ...r }));
-      entries.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statAvg').textContent = avg.toFixed(1);
+    document.getElementById('statReplied').textContent = replied;
+    document.getElementById('statPending').textContent = total - replied;
+  }
 
-      const total = entries.length;
-      const avg = total ? (entries.reduce((s, r) => s + (r.rating || 0), 0) / total) : 0;
-      const replied = entries.filter(r => r.adminReply && r.adminReply.trim()).length;
+  function isNew(ts) {
+    return (Date.now() - (ts || 0)) < (24 * 60 * 60 * 1000);
+  }
 
-      document.getElementById('statTotal').textContent = total;
-      document.getElementById('statAvg').textContent = avg.toFixed(1);
-      document.getElementById('statReplied').textContent = replied;
-      document.getElementById('statPending').textContent = total - replied;
+  function renderFilteredReviews() {
+    const listEl = document.getElementById('reviewsList');
+    const sortVal = document.getElementById('sortSelect').value;
 
-      listEl.innerHTML = entries.map(r => `
+    let filtered = allReviews.slice();
+    if (currentFilter === 'replied') {
+      filtered = filtered.filter(r => r.adminReply && r.adminReply.trim());
+    } else if (currentFilter === 'pending') {
+      filtered = filtered.filter(r => !r.adminReply || !r.adminReply.trim());
+    } else if (currentFilter === 'new') {
+      filtered = filtered.filter(r => isNew(r.createdAt));
+    }
+
+    filtered.sort((a, b) => sortVal === 'oldest'
+      ? (a.createdAt || 0) - (b.createdAt || 0)
+      : (b.createdAt || 0) - (a.createdAt || 0));
+
+    if (!allReviews.length) {
+      listEl.innerHTML = '<div class="empty-state">No reviews yet.</div>';
+      return;
+    }
+    if (!filtered.length) {
+      listEl.innerHTML = '<div class="empty-state">No reviews match this filter.</div>';
+      return;
+    }
+
+    listEl.innerHTML = filtered.map(r => {
+      const hasReply = r.adminReply && r.adminReply.trim();
+      const editing = editingIds.has(r.id);
+      const showTextarea = !hasReply || editing;
+
+      return `
         <div class="review-row" id="row-${r.id}">
           <div class="review-row-top">
             <div>
-              <div class="review-row-name">${escapeHtml(r.name || 'Anonymous')}</div>
+              <div class="review-row-name">
+                ${escapeHtml(r.name || 'Anonymous')}
+                ${isNew(r.createdAt) ? '<span class="new-badge">New</span>' : ''}
+              </div>
               <div class="review-row-date">${formatDate(r.createdAt || 0)}</div>
             </div>
           </div>
           <div class="review-row-stars">${renderStars(r.rating || 0)}</div>
           <div class="review-row-text">"${escapeHtml(r.comment || '')}"</div>
-          ${r.adminReply ? `
+          ${hasReply ? `
             <div class="reply-existing">
               <span class="lbl">Current Reply</span>
               ${escapeHtml(r.adminReply)}
             </div>` : ''}
-          <div class="reply-box">
-            <textarea id="reply-${r.id}" placeholder="Write a reply to this review...">${r.adminReply ? escapeHtml(r.adminReply) : ''}</textarea>
+          ${showTextarea ? `
+            <div class="reply-box">
+              <textarea id="reply-${r.id}" placeholder="Write a reply to this review...">${hasReply ? escapeHtml(r.adminReply) : ''}</textarea>
+              <div class="reply-actions">
+                <button class="btn-reply" onclick="saveReply('${r.id}')">Save Reply</button>
+                ${hasReply ? `<button class="btn-edit-reply" onclick="cancelEdit('${r.id}')">Cancel</button>` : ''}
+                <button class="btn-delete" onclick="deleteReview('${r.id}')">Delete Review</button>
+              </div>
+            </div>
+          ` : `
             <div class="reply-actions">
-              <button class="btn-reply" onclick="saveReply('${r.id}')">Save Reply</button>
+              <button class="btn-edit-reply" onclick="startEdit('${r.id}')">Edit Reply</button>
               <button class="btn-delete" onclick="deleteReview('${r.id}')">Delete Review</button>
             </div>
-          </div>
+          `}
         </div>
-      `).join('');
-    });
+      `;
+    }).join('');
+  }
+
+  function startEdit(id) {
+    editingIds.add(id);
+    renderFilteredReviews();
+  }
+
+  function cancelEdit(id) {
+    editingIds.delete(id);
+    renderFilteredReviews();
   }
 
   function saveReply(id) {
     const text = document.getElementById('reply-' + id).value.trim();
     db.ref('reviews/' + id + '/adminReply').set(text).then(() => {
-      const btn = document.querySelector(`#row-${id} .btn-reply`);
-      if (btn) {
-        const original = btn.textContent;
-        btn.textContent = 'Saved ✓';
-        setTimeout(() => { btn.textContent = original; }, 1800);
-      }
+      editingIds.delete(id);
     }).catch(() => {
       alert('Failed to save reply. Please try again.');
     });
