@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sahaamtec Admin – Reviews</title>
+<title>Sahaamtec Admin – Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
@@ -53,10 +53,10 @@
   .login-error { color: var(--red); font-size: 0.82rem; text-align: center; margin-top: 14px; min-height: 18px; }
 
   /* DASHBOARD */
-  .dash { display: none; max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+  .dash { display: none; max-width: 1100px; margin: 0 auto; padding: 30px 20px 60px; }
   .dash-header {
     display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 30px; flex-wrap: wrap; gap: 12px;
+    margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
   }
   .dash-header h1 { font-family: 'Rajdhani', sans-serif; font-size: 1.4rem; font-weight: 700; }
   .dash-header h1 span { color: var(--cyan); }
@@ -65,6 +65,17 @@
     padding: 8px 18px; border-radius: 6px; font-size: 0.82rem; cursor: pointer;
   }
   .btn-logout:hover { border-color: var(--red); color: var(--red); }
+
+  .main-tabs { display: flex; gap: 6px; margin-bottom: 28px; border-bottom: 1px solid var(--border); }
+  .main-tab {
+    background: none; border: none; color: var(--white-dim); padding: 12px 20px;
+    font-size: 0.88rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent;
+    font-family: 'Inter', sans-serif; transition: all 0.2s;
+  }
+  .main-tab:hover { color: var(--white); }
+  .main-tab.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+  .main-panel { display: none; }
+  .main-panel.active { display: block; }
 
   .stat-row { display: flex; gap: 14px; margin-bottom: 30px; flex-wrap: wrap; }
   .stat-box {
@@ -143,6 +154,107 @@
 
   .empty-state { text-align: center; color: var(--white-dim); padding: 60px 20px; font-size: 0.9rem; }
   .loading-state { text-align: center; color: var(--white-dim); padding: 60px 20px; }
+
+  /* PRODUCTS PANEL */
+  .products-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  .btn-primary-action {
+    background: var(--cyan); color: var(--navy); border: none; padding: 11px 22px;
+    border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; letter-spacing: 0.02em;
+  }
+  .btn-primary-action:hover { background: var(--cyan2); }
+
+  .product-form-card {
+    background: var(--navy2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px; margin-bottom: 24px; display: none;
+  }
+  .product-form-card.open { display: block; }
+  .product-form-card h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; margin-bottom: 18px; }
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group textarea {
+    background: var(--navy3); border: 1px solid var(--border); border-radius: 6px;
+    padding: 10px 12px; color: var(--white); font-size: 0.88rem; min-height: 80px;
+    font-family: 'Inter', sans-serif; resize: vertical; outline: none;
+  }
+  .form-group textarea:focus, .form-group select { border-color: var(--cyan); }
+  .form-group select {
+    background: var(--navy3); border: 1px solid var(--border); border-radius: 6px;
+    padding: 11px 12px; color: var(--white); font-size: 0.88rem; outline: none; font-family: 'Inter', sans-serif;
+  }
+  .form-group select option { background: var(--navy2); }
+  .new-cat-row { display: flex; gap: 8px; margin-top: 8px; }
+  .new-cat-row input { flex: 1; }
+  .btn-small { background: var(--navy3); border: 1px solid var(--border); color: var(--cyan); padding: 8px 14px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; white-space: nowrap; }
+  .btn-small:hover { border-color: var(--cyan); }
+
+  .stock-toggle-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .switch { position: relative; width: 46px; height: 26px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider-toggle {
+    position: absolute; cursor: pointer; inset: 0; background: var(--white-faint, rgba(240,244,255,0.15));
+    transition: 0.3s; border-radius: 26px;
+  }
+  .slider-toggle::before {
+    position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
+    background: white; transition: 0.3s; border-radius: 50%;
+  }
+  .switch input:checked + .slider-toggle { background: #2bb673; }
+  .switch input:checked + .slider-toggle::before { transform: translateX(20px); }
+
+  .image-upload-row { display: flex; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .image-slot {
+    width: 80px; height: 80px; border-radius: 8px; border: 1.5px dashed var(--border);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    position: relative; overflow: hidden; background: var(--navy3); flex-shrink: 0;
+  }
+  .image-slot img { width: 100%; height: 100%; object-fit: cover; }
+  .image-slot .plus { font-size: 1.6rem; color: var(--white-dim); }
+  .image-slot .remove-img {
+    position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; background: rgba(5,13,26,0.8);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; cursor: pointer;
+  }
+  .upload-hint { font-size: 0.75rem; color: var(--white-dim); margin-bottom: 16px; }
+  .storage-meter { font-size: 0.74rem; color: var(--white-dim); margin-top: 4px; }
+  .form-error-msg { color: var(--red); font-size: 0.82rem; margin-top: 8px; min-height: 18px; }
+
+  .product-list-card {
+    background: var(--navy2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 12px; display: flex; gap: 14px; align-items: center;
+  }
+  .product-list-card img { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; background: var(--navy3); flex-shrink: 0; }
+  .product-list-info { flex: 1; min-width: 0; }
+  .product-list-name { font-weight: 700; font-size: 0.92rem; }
+  .product-list-meta { font-size: 0.78rem; color: var(--white-dim); }
+  .product-list-price { font-weight: 700; color: var(--cyan); font-size: 0.95rem; }
+  .product-list-actions { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+
+  /* ORDERS PANEL */
+  .order-card {
+    background: var(--navy2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; margin-bottom: 16px;
+  }
+  .order-card-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+  .order-card-id { font-size: 0.72rem; color: var(--white-dim); letter-spacing: 0.04em; }
+  .order-card-customer { font-weight: 700; font-size: 1rem; margin-top: 2px; }
+  .order-card-date { font-size: 0.78rem; color: var(--white-dim); }
+  .order-status-badge {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 100px;
+  }
+  .order-status-badge.pending { background: rgba(244,196,48,0.15); color: var(--gold); }
+  .order-status-badge.processing { background: rgba(0,200,248,0.15); color: var(--cyan); }
+  .order-status-badge.shipped { background: rgba(124,77,255,0.15); color: #9b7bff; }
+  .order-status-badge.delivered { background: rgba(43,182,115,0.15); color: #2bb673; }
+  .order-status-badge.cancelled { background: rgba(230,57,70,0.15); color: var(--red); }
+  .order-items-list { font-size: 0.85rem; color: var(--white-dim); margin-bottom: 10px; line-height: 1.7; }
+  .order-contact { font-size: 0.85rem; margin-bottom: 12px; }
+  .order-contact a { color: var(--cyan); text-decoration: none; }
+  .order-total-row { font-weight: 700; margin-bottom: 14px; }
+  .order-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .order-status-select {
+    background: var(--navy3); border: 1px solid var(--border); color: var(--white);
+    padding: 8px 12px; border-radius: 6px; font-size: 0.82rem; outline: none; font-family: 'Inter', sans-serif;
+  }
+  .order-status-select option { background: var(--navy2); }
 </style>
 </head>
 <body>
@@ -169,10 +281,17 @@
 
 <div class="dash" id="dash">
   <div class="dash-header">
-    <h1>SAHAAM<span>TEC</span> &middot; Reviews Admin</h1>
+    <h1>SAHAAM<span>TEC</span> &middot; Admin</h1>
     <button class="btn-logout" onclick="doLogout()">Log Out</button>
   </div>
 
+  <div class="main-tabs">
+    <button class="main-tab active" data-tab="reviews" onclick="setMainTab('reviews')">Reviews</button>
+    <button class="main-tab" data-tab="products" onclick="setMainTab('products')">Products</button>
+    <button class="main-tab" data-tab="orders" onclick="setMainTab('orders')">Orders</button>
+  </div>
+
+  <div class="main-panel active" id="panelReviews">
   <div class="stat-row">
     <div class="stat-box" data-filter="all" onclick="setFilter('all')"><div class="num" id="statTotal">0</div><div class="lbl">Total Reviews</div></div>
     <div class="stat-box" data-filter="avg-noop" onclick="setFilter('all')"><div class="num" id="statAvg">0.0</div><div class="lbl">Average Rating</div></div>
@@ -196,6 +315,90 @@
   <div id="reviewsList">
     <div class="loading-state">Loading reviews&hellip;</div>
   </div>
+  </div>
+  <!-- /panelReviews -->
+
+  <div class="main-panel" id="panelProducts">
+    <div class="products-toolbar">
+      <span class="results-count" id="productsCount">0 products</span>
+      <button class="btn-primary-action" onclick="openProductForm()">+ Add Product</button>
+    </div>
+
+    <div class="product-form-card" id="productFormCard">
+      <h3 id="productFormTitle">Add New Product</h3>
+      <input type="hidden" id="p-editing-id" value="">
+
+      <div class="form-group">
+        <label>Product Name</label>
+        <input type="text" id="p-name" placeholder="e.g. 5KVA Pure Sine Wave Inverter">
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group">
+          <label>Category</label>
+          <select id="p-category"></select>
+          <div class="new-cat-row">
+            <input type="text" id="p-new-category" placeholder="Or type a new category...">
+            <button type="button" class="btn-small" onclick="addNewCategory()">Add Category</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Price (&#8358;)</label>
+          <input type="number" id="p-price" placeholder="e.g. 250000" min="0">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="p-description" placeholder="Describe the product, specs, warranty, brand..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Product Photos (up to 3)</label>
+        <div class="image-upload-row" id="imageUploadRow"></div>
+        <div class="upload-hint">Photos are automatically compressed. Max 3 photos per product.</div>
+        <input type="file" id="imageFileInput" accept="image/*" style="display:none;" onchange="handleImageSelect(event)">
+      </div>
+
+      <div class="stock-toggle-row">
+        <label class="switch">
+          <input type="checkbox" id="p-instock" checked>
+          <span class="slider-toggle"></span>
+        </label>
+        <span>In Stock / Available</span>
+      </div>
+
+      <p class="form-error-msg" id="productFormError"></p>
+
+      <div class="reply-actions">
+        <button class="btn-reply" onclick="saveProduct()">Save Product</button>
+        <button class="btn-edit-reply" onclick="closeProductForm()">Cancel</button>
+      </div>
+    </div>
+
+    <div id="productsList">
+      <div class="loading-state">Loading products&hellip;</div>
+    </div>
+  </div>
+  <!-- /panelProducts -->
+
+  <div class="main-panel" id="panelOrders">
+    <div class="products-toolbar">
+      <span class="results-count" id="ordersCount">0 orders</span>
+      <select class="sort-select" id="orderFilterSelect" onchange="renderOrders()">
+        <option value="all">All Orders</option>
+        <option value="pending">Pending</option>
+        <option value="processing">Processing</option>
+        <option value="shipped">Shipped</option>
+        <option value="delivered">Delivered</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+    <div id="ordersList">
+      <div class="loading-state">Loading orders&hellip;</div>
+    </div>
+  </div>
+  <!-- /panelOrders -->
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -404,6 +607,319 @@
     db.ref('reviews/' + id).remove().catch(() => {
       alert('Failed to delete. Please try again.');
     });
+  }
+
+  // ===== MAIN TABS =====
+  function setMainTab(tab) {
+    document.querySelectorAll('.main-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+    document.querySelectorAll('.main-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+    if (tab === 'products' && !productsLoaded) loadProducts();
+    if (tab === 'orders' && !ordersLoaded) loadOrders();
+  }
+
+  // ===== PRODUCTS =====
+  const DEFAULT_CATEGORIES = [
+    { id: 'batteries', name: 'Batteries' },
+    { id: 'inverters', name: 'Inverters' },
+    { id: 'panels', name: 'Solar Panels' },
+    { id: 'controllers', name: 'Charge Controllers' },
+    { id: 'cables', name: 'Cables' },
+    { id: 'accessories', name: 'Accessories' },
+    { id: 'materials', name: 'Electrical Materials' }
+  ];
+  let allProducts = [];
+  let allCategoriesAdmin = {};
+  let productsLoaded = false;
+  let currentImages = []; // base64 strings for the form currently open
+  const MAX_IMAGES = 3;
+  const MAX_IMAGE_BYTES = 200 * 1024; // 200KB per compressed image, hard cap
+
+  function loadCategories() {
+    db.ref('categories').on('value', (snap) => {
+      allCategoriesAdmin = snap.val() || {};
+      populateCategorySelect();
+    });
+  }
+
+  function populateCategorySelect() {
+    const sel = document.getElementById('p-category');
+    const merged = {};
+    DEFAULT_CATEGORIES.forEach(c => merged[c.id] = c.name);
+    Object.entries(allCategoriesAdmin).forEach(([id, c]) => {
+      merged[id] = typeof c === 'string' ? c : c.name;
+    });
+    const current = sel.value;
+    sel.innerHTML = Object.entries(merged).map(([id, name]) =>
+      `<option value="${id}">${escapeHtml(name)}</option>`
+    ).join('');
+    if (current && merged[current]) sel.value = current;
+  }
+
+  function addNewCategory() {
+    const input = document.getElementById('p-new-category');
+    const name = input.value.trim();
+    if (!name) return;
+    const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    db.ref('categories/' + id).set({ name }).then(() => {
+      input.value = '';
+      setTimeout(() => { document.getElementById('p-category').value = id; }, 300);
+    }).catch(() => alert('Failed to add category.'));
+  }
+
+  function openProductForm(productId) {
+    document.getElementById('productFormCard').classList.add('open');
+    document.getElementById('productFormError').textContent = '';
+    currentImages = [];
+
+    if (productId) {
+      const p = allProducts.find(x => x.id === productId);
+      if (!p) return;
+      document.getElementById('productFormTitle').textContent = 'Edit Product';
+      document.getElementById('p-editing-id').value = productId;
+      document.getElementById('p-name').value = p.name || '';
+      document.getElementById('p-price').value = p.price || '';
+      document.getElementById('p-description').value = p.description || '';
+      document.getElementById('p-instock').checked = p.inStock !== false;
+      currentImages = (p.images || []).slice();
+      populateCategorySelect();
+      setTimeout(() => { document.getElementById('p-category').value = p.category || ''; }, 100);
+    } else {
+      document.getElementById('productFormTitle').textContent = 'Add New Product';
+      document.getElementById('p-editing-id').value = '';
+      document.getElementById('p-name').value = '';
+      document.getElementById('p-price').value = '';
+      document.getElementById('p-description').value = '';
+      document.getElementById('p-instock').checked = true;
+      populateCategorySelect();
+    }
+    renderImageSlots();
+    document.getElementById('productFormCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function closeProductForm() {
+    document.getElementById('productFormCard').classList.remove('open');
+    currentImages = [];
+  }
+
+  function renderImageSlots() {
+    const row = document.getElementById('imageUploadRow');
+    let html = '';
+    currentImages.forEach((img, i) => {
+      html += `<div class="image-slot">
+        <img src="${img}">
+        <div class="remove-img" onclick="removeImage(${i})">&#x2715;</div>
+      </div>`;
+    });
+    if (currentImages.length < MAX_IMAGES) {
+      html += `<div class="image-slot" onclick="document.getElementById('imageFileInput').click()">
+        <span class="plus">+</span>
+      </div>`;
+    }
+    row.innerHTML = html;
+  }
+
+  function removeImage(i) {
+    currentImages.splice(i, 1);
+    renderImageSlots();
+  }
+
+  function handleImageSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const errEl = document.getElementById('productFormError');
+    errEl.textContent = '';
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const compressed = compressImage(img, 800, 0.7);
+        const sizeBytes = Math.ceil(compressed.length * 0.75);
+        if (sizeBytes > MAX_IMAGE_BYTES) {
+          const compressed2 = compressImage(img, 500, 0.55);
+          const sizeBytes2 = Math.ceil(compressed2.length * 0.75);
+          if (sizeBytes2 > MAX_IMAGE_BYTES) {
+            errEl.textContent = 'This photo is too large even after compression. Please choose a smaller or simpler photo.';
+            return;
+          }
+          currentImages.push(compressed2);
+        } else {
+          currentImages.push(compressed);
+        }
+        renderImageSlots();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    event.target.value = '';
+  }
+
+  function compressImage(img, maxWidth, quality) {
+    const canvas = document.createElement('canvas');
+    let w = img.width, h = img.height;
+    if (w > maxWidth) {
+      h = Math.round(h * (maxWidth / w));
+      w = maxWidth;
+    }
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    return canvas.toDataURL('image/jpeg', quality);
+  }
+
+  function saveProduct() {
+    const name = document.getElementById('p-name').value.trim();
+    const category = document.getElementById('p-category').value;
+    const price = parseFloat(document.getElementById('p-price').value);
+    const description = document.getElementById('p-description').value.trim();
+    const inStock = document.getElementById('p-instock').checked;
+    const editingId = document.getElementById('p-editing-id').value;
+    const errEl = document.getElementById('productFormError');
+
+    if (!name || !category || isNaN(price) || price < 0) {
+      errEl.textContent = 'Please fill in product name, category, and a valid price.';
+      return;
+    }
+
+    const productData = {
+      name, category, price, description,
+      inStock, images: currentImages,
+      createdAt: editingId ? (allProducts.find(p => p.id === editingId)?.createdAt || Date.now()) : Date.now()
+    };
+
+    const ref = editingId ? db.ref('products/' + editingId) : db.ref('products').push();
+    ref.set(productData).then(() => {
+      closeProductForm();
+    }).catch((err) => {
+      errEl.textContent = 'Failed to save product. ' + (err.message || '');
+    });
+  }
+
+  function loadProducts() {
+    productsLoaded = true;
+    loadCategories();
+    db.ref('products').on('value', (snap) => {
+      const data = snap.val() || {};
+      allProducts = Object.entries(data).map(([id, p]) => ({ id, ...p }));
+      allProducts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      renderProductsList();
+    }, () => {
+      document.getElementById('productsList').innerHTML = '<div class="empty-state">Could not load products.</div>';
+    });
+  }
+
+  function renderProductsList() {
+    const listEl = document.getElementById('productsList');
+    document.getElementById('productsCount').textContent = allProducts.length + ' product' + (allProducts.length === 1 ? '' : 's');
+
+    if (!allProducts.length) {
+      listEl.innerHTML = '<div class="empty-state">No products yet. Click "+ Add Product" to get started.</div>';
+      return;
+    }
+
+    listEl.innerHTML = allProducts.map(p => {
+      const img = (p.images && p.images[0]) || '';
+      const inStock = p.inStock !== false;
+      return `<div class="product-list-card">
+        ${img ? `<img src="${img}">` : `<div style="width:56px;height:56px;border-radius:8px;background:var(--navy3);flex-shrink:0;"></div>`}
+        <div class="product-list-info">
+          <div class="product-list-name">${escapeHtml(p.name)}</div>
+          <div class="product-list-meta">${escapeHtml(catNameAdmin(p.category))} &middot; ${inStock ? '<span style="color:#2bb673;">In Stock</span>' : '<span style="color:var(--red);">Out of Stock</span>'}</div>
+        </div>
+        <div class="product-list-price">&#8358;${Number(p.price || 0).toLocaleString('en-NG')}</div>
+        <div class="product-list-actions">
+          <button class="btn-small" onclick="toggleStock('${p.id}', ${!inStock})">${inStock ? 'Mark Out' : 'Mark In Stock'}</button>
+          <button class="btn-edit-reply" onclick="openProductForm('${p.id}')">Edit</button>
+          <button class="btn-delete" onclick="deleteProduct('${p.id}')">Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function catNameAdmin(catId) {
+    const merged = {};
+    DEFAULT_CATEGORIES.forEach(c => merged[c.id] = c.name);
+    if (allCategoriesAdmin[catId]) {
+      return typeof allCategoriesAdmin[catId] === 'string' ? allCategoriesAdmin[catId] : allCategoriesAdmin[catId].name;
+    }
+    return merged[catId] || catId;
+  }
+
+  function toggleStock(id, newStatus) {
+    db.ref('products/' + id + '/inStock').set(newStatus).catch(() => alert('Failed to update stock status.'));
+  }
+
+  function deleteProduct(id) {
+    if (!confirm('Delete this product permanently? This cannot be undone.')) return;
+    db.ref('products/' + id).remove().catch(() => alert('Failed to delete product.'));
+  }
+
+  // ===== ORDERS =====
+  let allOrders = [];
+  let ordersLoaded = false;
+
+  function loadOrders() {
+    ordersLoaded = true;
+    db.ref('orders').on('value', (snap) => {
+      const data = snap.val() || {};
+      allOrders = Object.entries(data).map(([id, o]) => ({ id, ...o }));
+      allOrders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      renderOrders();
+    }, () => {
+      document.getElementById('ordersList').innerHTML = '<div class="empty-state">Could not load orders.</div>';
+    });
+  }
+
+  function renderOrders() {
+    const listEl = document.getElementById('ordersList');
+    const filter = document.getElementById('orderFilterSelect').value;
+    let filtered = allOrders;
+    if (filter !== 'all') filtered = allOrders.filter(o => (o.status || 'pending') === filter);
+
+    document.getElementById('ordersCount').textContent = filtered.length + ' order' + (filtered.length === 1 ? '' : 's');
+
+    if (!filtered.length) {
+      listEl.innerHTML = '<div class="empty-state">No orders' + (filter !== 'all' ? ' with this status' : '') + ' yet.</div>';
+      return;
+    }
+
+    listEl.innerHTML = filtered.map(o => {
+      const status = o.status || 'pending';
+      const total = (o.items || []).reduce((s, it) => s + (it.price * it.qty), 0);
+      const itemsHtml = (o.items || []).map(it => `${escapeHtml(it.name)} &times; ${it.qty} &mdash; &#8358;${Number(it.price * it.qty).toLocaleString('en-NG')}`).join('<br>');
+      return `<div class="order-card">
+        <div class="order-card-top">
+          <div>
+            <div class="order-card-id">Order #${o.id.slice(-6).toUpperCase()}</div>
+            <div class="order-card-customer">${escapeHtml(o.customerName)}</div>
+            <div class="order-card-date">${formatDate(o.createdAt || 0)}</div>
+          </div>
+          <span class="order-status-badge ${status}">${status}</span>
+        </div>
+        <div class="order-items-list">${itemsHtml}</div>
+        <div class="order-total-row">Total: &#8358;${Number(total).toLocaleString('en-NG')}</div>
+        <div class="order-contact">
+          📞 <a href="tel:${escapeHtml(o.phone)}">${escapeHtml(o.phone)}</a> &middot;
+          💬 <a href="https://wa.me/${escapeHtml((o.phone || '').replace(/[^0-9]/g, ''))}" target="_blank">WhatsApp</a><br>
+          📍 ${escapeHtml(o.address)}
+        </div>
+        <div class="order-actions">
+          <select class="order-status-select" onchange="updateOrderStatus('${o.id}', this.value)">
+            <option value="pending" ${status === 'pending' ? 'selected' : ''}>Pending</option>
+            <option value="processing" ${status === 'processing' ? 'selected' : ''}>Processing</option>
+            <option value="shipped" ${status === 'shipped' ? 'selected' : ''}>Shipped</option>
+            <option value="delivered" ${status === 'delivered' ? 'selected' : ''}>Delivered</option>
+            <option value="cancelled" ${status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+          </select>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function updateOrderStatus(id, status) {
+    db.ref('orders/' + id + '/status').set(status).catch(() => alert('Failed to update order status.'));
   }
 </script>
 </body>
