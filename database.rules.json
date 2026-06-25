@@ -5,19 +5,19 @@
 
     "products": {
       ".read": true,
-      ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_ADMIN_UID'"
+      ".write": "auth != null && (auth.uid === 'hXXxO9YqEXhj9J68l89QfA29bDr1' || auth.uid === 'RPRVT8L7AJOSVfF86ap0Zaud6042')"
     },
 
     "categories": {
       ".read": true,
-      ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_ADMIN_UID'"
+      ".write": "auth != null && (auth.uid === 'hXXxO9YqEXhj9J68l89QfA29bDr1' || auth.uid === 'RPRVT8L7AJOSVfF86ap0Zaud6042')"
     },
 
     "orders": {
-      ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_ADMIN_UID'",
+      ".read": "auth != null && (auth.uid === 'hXXxO9YqEXhj9J68l89QfA29bDr1' || auth.uid === 'RPRVT8L7AJOSVfF86ap0Zaud6042')",
       ".write": true,
       "$orderId": {
-        ".read": "auth != null && (data.child('uid').val() === auth.uid || auth.uid === 'REPLACE_WITH_YOUR_ADMIN_UID')",
+        ".read": "auth != null && (data.child('uid').val() === auth.uid || auth.uid === 'hXXxO9YqEXhj9J68l89QfA29bDr1' || auth.uid === 'RPRVT8L7AJOSVfF86ap0Zaud6042')",
         ".validate": "newData.hasChildren(['customerName','phone','address','items','status','createdAt']) && newData.child('customerName').isString() && newData.child('phone').isString() && newData.child('address').isString() && newData.child('status').val() === 'pending'"
       }
     },

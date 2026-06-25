@@ -424,6 +424,7 @@
     <div class="hero-actions">
       <a href="#services" class="btn-primary">Explore Services</a>
       <a href="#contact" class="btn-outline">Get a Free Quote</a>
+      <a href="store.html" class="btn-outline">Visit Our Store</a>
     </div>
   </div>
   <div class="scroll-hint">Scroll</div>
@@ -693,6 +694,7 @@
       <h3 class="section-title" style="font-size:1.6rem;">Easy to Find,<br><em>Easy to Reach</em></h3>
       <p class="section-desc" style="margin-bottom:20px;">We're centrally located in Geri Alimi area, Ilorin &mdash; close to Right Way Commercial and Jummy Group of Schools. Tap the map to get live directions straight from your phone.</p>
       <a href="https://maps.app.goo.gl/AjDDJHSgsEVjNhta9" target="_blank" class="btn-primary" style="display:inline-block;">Get Directions</a>
+      <a href="store.html" class="btn-outline" style="display:inline-block;margin-top:12px;">Visit Our Store</a>
     </div>
   </div>
 </div>
@@ -862,7 +864,42 @@ const videoSrcs = {
   v5: 'VID-20260617-WA0075.mp4'
 };
 
-// INLINE MUTED TAP-TO-PLAY (no popup, no sound)
+// AUTO-GENERATE VIDEO THUMBNAILS
+function generateThumbnail(cell) {
+  const src = cell.dataset.src;
+  if (!src) return;
+  const vid = document.createElement('video');
+  vid.src = src;
+  vid.muted = true;
+  vid.playsInline = true;
+  vid.preload = 'metadata';
+  vid.crossOrigin = 'anonymous';
+  vid.addEventListener('loadeddata', () => {
+    vid.currentTime = 0.5;
+  });
+  vid.addEventListener('seeked', () => {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = vid.videoWidth || 320;
+      canvas.height = vid.videoHeight || 180;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(vid, 0, 0, canvas.width, canvas.height);
+      const dataURL = canvas.toDataURL('image/jpeg', 0.7);
+      const img = document.createElement('img');
+      img.src = dataURL;
+      img.alt = '';
+      img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;';
+      cell.insertBefore(img, cell.firstChild);
+    } catch(e) {}
+    vid.remove();
+  });
+  vid.load();
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.video-cell').forEach(cell => generateThumbnail(cell));
+});
+
+
 function playInline(cell) {
   const video = cell.querySelector('video');
   const img = cell.querySelector('img');
