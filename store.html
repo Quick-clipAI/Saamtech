@@ -125,9 +125,65 @@
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
   }
   .results-count { font-size: 0.85rem; color: var(--white-dim); }
-  .sort-select {
-    background: var(--navy2); border: 1px solid var(--border); border-radius: 8px;
-    padding: 9px 14px; color: var(--white); font-size: 0.85rem; outline: none; font-family: 'Inter', sans-serif;
+  .filter-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 18px; background: var(--navy2); border: 1px solid var(--border);
+    border-radius: 24px; color: var(--white); font-family: 'Inter', sans-serif;
+    font-size: 0.82rem; font-weight: 600; cursor: pointer; position: relative; transition: all 0.2s;
+  }
+  .filter-btn.has-filter, .filter-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  .filter-badge {
+    position: absolute; top: -5px; right: -5px;
+    background: var(--cyan); color: var(--navy); font-size: 0.5rem; font-weight: 800;
+    min-width: 15px; height: 15px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* ===== FILTER MODAL ===== */
+  .filter-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+    z-index: 8000; display: none; align-items: flex-end; justify-content: center;
+  }
+  .filter-backdrop.open { display: flex; }
+  .filter-panel {
+    background: var(--navy2); border-radius: 20px 20px 0 0; width: 100%; max-width: 600px;
+    max-height: 82vh; overflow-y: auto; border-top: 1px solid var(--border);
+    animation: slideUp 0.28s cubic-bezier(.32,1.2,.5,1);
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .filter-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px 14px; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: var(--navy2); z-index: 1;
+  }
+  .filter-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; }
+  .filter-close { background: none; border: none; color: var(--white-dim); font-size: 1.1rem; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+  .filter-section { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .filter-section-label { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); margin-bottom: 12px; }
+  .filter-options { display: flex; flex-direction: column; gap: 7px; }
+  .filter-option {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--navy3);
+    color: var(--white-dim); font-family: 'Inter', sans-serif; font-size: 0.85rem;
+    cursor: pointer; text-align: left; transition: all 0.15s; width: 100%;
+  }
+  .filter-option:hover { border-color: rgba(0,200,248,0.4); }
+  .filter-option.active { border-color: var(--cyan); color: var(--cyan); background: rgba(0,200,248,0.07); }
+  .filter-option.active::after { content: '✓'; margin-left: auto; font-weight: 800; font-size: 0.9rem; }
+  .filter-option svg { flex-shrink: 0; stroke: currentColor; }
+  .filter-actions { display: flex; gap: 10px; padding: 16px 20px 32px; }
+  .filter-clear {
+    flex: 1; padding: 13px; border-radius: 10px; border: 1px solid var(--border);
+    background: none; color: var(--white-dim); font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  }
+  .filter-apply {
+    flex: 2; padding: 13px; border-radius: 10px; border: none;
+    background: var(--cyan); color: var(--navy); font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 800; cursor: pointer;
+  }
+
+  .product-group-title {
+    font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan);
+    padding: 4px 0 8px; border-bottom: 1px solid var(--border); margin-bottom: 4px;
   }
 
   /* PRODUCT GRID */
@@ -274,42 +330,35 @@
     .float-cart-bar { display: none !important; }
   }
 
-  /* ===== BOTTOM NAV ===== */
-  .bottom-nav {
-    display: flex;
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 950;
-    background: var(--navy2); border-top: 2px solid var(--cyan);
-    height: 64px; box-shadow: 0 -4px 20px rgba(0,200,248,0.08);
+  /* ===== BOTTOM NAV (coded-games pattern) ===== */
+  .bnav {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+    background: rgba(10,18,32,0.97); backdrop-filter: blur(14px);
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-around;
+    padding: 0.4rem 0 0.7rem;
   }
-  @media (min-width: 901px) {
-    .bottom-nav { display: none; }
-    body { padding-bottom: 0; }
-  }
-  @media (max-width: 900px) {
-    body { padding-bottom: 64px; }
-  }
-  .bottom-nav-items {
-    display: flex; width: 100%; align-items: stretch;
-  }
-  .bn-item {
-    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 3px; cursor: pointer; border: none; background: none;
-    color: var(--white-dim); font-family: 'Inter', sans-serif; font-size: 0.62rem;
-    font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
-    transition: color 0.2s; padding: 0; text-decoration: none;
+  @media (min-width: 901px) { .bnav { display: none; } }
+  body { padding-bottom: 70px; }
+  @media (min-width: 901px) { body { padding-bottom: 0; } }
+  .bnav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    cursor: pointer; padding: 0.3rem 0.8rem; border-radius: 10px;
+    border: none; background: none; color: var(--white-dim);
+    text-decoration: none; flex: 1; transition: color 0.2s;
     -webkit-tap-highlight-color: transparent;
   }
-  .bn-item.active, .bn-item:hover { color: var(--cyan); }
-  .bn-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2;
-    stroke-linecap: round; stroke-linejoin: round; }
-  .bn-cart-badge {
-    position: relative; display: flex; flex-direction: column; align-items: center;
-    justify-content: center; gap: 3px;
-  }
+  .bnav-item.active { color: var(--cyan); }
+  .bnav-item:active { opacity: 0.7; }
+  .bnav-icon { font-size: 1.2rem; line-height: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+  .bnav-icon svg { stroke: currentColor; }
+  .bnav-label { font-family: 'Inter', sans-serif; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
   .bn-cart-dot {
-    position: absolute; top: -4px; right: -8px; background: var(--cyan); color: var(--navy);
-    font-size: 0.55rem; font-weight: 700; width: 15px; height: 15px; border-radius: 50%;
-    display: none; align-items: center; justify-content: center;
+    position: absolute; top: -5px; right: -8px;
+    background: var(--cyan); color: var(--navy);
+    font-size: 0.5rem; font-weight: 800;
+    min-width: 14px; height: 14px; border-radius: 50%;
+    display: none; align-items: center; justify-content: center; padding: 0 2px;
   }
   .bn-cart-dot.show { display: flex; }
 
@@ -618,22 +667,58 @@
     </div>
   </div>
 
-  <div class="category-grid" id="categoryGrid">
-    <!-- populated by JS -->
-  </div>
-
   <div class="store-toolbar">
     <span class="results-count" id="resultsCount">Loading products&hellip;</span>
-    <select class="sort-select" id="sortSelect" onchange="renderProducts()">
-      <option value="newest">Newest First</option>
-      <option value="price-low">Price: Low to High</option>
-      <option value="price-high">Price: High to Low</option>
-    </select>
+    <button class="filter-btn" onclick="openFilterModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+      Filter &amp; Sort
+      <span class="filter-badge" id="filterBadge" style="display:none;"></span>
+    </button>
   </div>
 
   <div class="product-grid" id="productGrid">
     <div class="empty-state">
       <h3 class="empty-title">Loading products&hellip;</h3>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FILTER MODAL ===== -->
+<div class="filter-backdrop" id="filterBackdrop" onclick="if(event.target===this)closeFilterModal()">
+  <div class="filter-panel" id="filterPanel">
+    <div class="filter-header">
+      <span class="filter-title">Filter &amp; Sort</span>
+      <button class="filter-close" onclick="closeFilterModal()">&#x2715;</button>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-label">Sort By</div>
+      <div class="filter-options" id="sortOptions">
+        <button class="filter-option active" data-sort="newest" onclick="selectSort(this)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/></svg>
+          Newest First
+        </button>
+        <button class="filter-option" data-sort="price-low" onclick="selectSort(this)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Price: Low to High
+        </button>
+        <button class="filter-option" data-sort="price-high" onclick="selectSort(this)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Price: High to Low
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-label">Category</div>
+      <div class="filter-options" id="categoryOptions">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button class="filter-clear" onclick="clearFilters()">Clear All</button>
+      <button class="filter-apply" onclick="applyFilters()">Show Results</button>
     </div>
   </div>
 </div>
@@ -693,28 +778,32 @@
 </div>
 
 <!-- ===== BOTTOM NAV ===== -->
-<nav class="bottom-nav" aria-label="Bottom navigation">
-  <div class="bottom-nav-items">
-    <a class="bn-item active" id="bn-home" onclick="switchView('browse')" href="#">
-      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      Home
-    </a>
-    <button class="bn-item" id="bn-cart" onclick="openCart()">
-      <div class="bn-cart-badge">
-        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
-        <span class="bn-cart-dot" id="bnCartDot">0</span>
-      </div>
-      Cart
-    </button>
-    <button class="bn-item" id="bn-orders" onclick="switchView('orders')">
-      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-      My Orders
-    </button>
-    <button class="bn-item" id="bn-profile" onclick="switchView('profile')">
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Profile
-    </button>
-  </div>
+<nav class="bnav">
+  <a class="bnav-item active" id="bn-home" href="#" onclick="switchView('browse');return false;">
+    <span class="bnav-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </span>
+    <span class="bnav-label">Home</span>
+  </a>
+  <a class="bnav-item" id="bn-cart" href="#" onclick="openCart();return false;">
+    <span class="bnav-icon" style="position:relative;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+      <span class="bn-cart-dot" id="bnCartDot"></span>
+    </span>
+    <span class="bnav-label">Cart</span>
+  </a>
+  <a class="bnav-item" id="bn-orders" href="#" onclick="switchView('orders');return false;">
+    <span class="bnav-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    </span>
+    <span class="bnav-label">My Orders</span>
+  </a>
+  <a class="bnav-item" id="bn-profile" href="#" onclick="switchView('profile');return false;">
+    <span class="bnav-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </span>
+    <span class="bnav-label">Profile</span>
+  </a>
 </nav>
 
 <!-- ===== AUTH MODAL ===== -->
@@ -927,42 +1016,93 @@ function loadProducts() {
   });
 }
 
-// ===== CATEGORIES =====
+// ===== CATEGORIES & FILTER MODAL =====
+let activeSort = 'newest';
+let pendingSort = 'newest';
+let pendingCategory = null;
+
 function renderCategories() {
-  const grid = document.getElementById('categoryGrid');
+  // Populate category options inside filter modal
+  const catOptions = document.getElementById('categoryOptions');
+  if (!catOptions) return;
   const merged = { ...Object.fromEntries(DEFAULT_CATEGORIES.map(c => [c.id, c])), ...allCategories };
 
-  // Build counts — normalize keys to lowercase for matching
   const counts = {};
   Object.values(allProducts).forEach(p => {
     if (!p.category) return;
     const key = String(p.category).toLowerCase().trim();
     counts[key] = (counts[key] || 0) + 1;
   });
+  const getCount = (id, name) =>
+    counts[String(id).toLowerCase().trim()] || counts[String(name).toLowerCase().trim()] || 0;
 
-  const getCount = (id, name) => {
-    return counts[String(id).toLowerCase().trim()] ||
-           counts[String(name).toLowerCase().trim()] || 0;
-  };
-
-  let html = `<div class="category-card ${!activeCategory ? 'active' : ''}" onclick="filterCategory(null)">
-    <span class="category-card-icon"><i data-lucide="layout-grid"></i></span>
-    <div class="category-card-name">All Products</div>
-    <div class="category-card-count">${Object.keys(allProducts).length} items</div>
-  </div>`;
+  let html = `<button class="filter-option ${!pendingCategory ? 'active' : ''}" onclick="selectCategory(null, this)">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    All Products <span style="margin-left:auto;color:var(--white-dim);font-size:0.75rem;">${Object.keys(allProducts).length}</span>
+  </button>`;
   Object.entries(merged).forEach(([id, cat]) => {
     const name = typeof cat === 'string' ? cat : cat.name;
-    const iconName = CAT_ICONS[id] || CAT_ICONS['default'];
+    const iconName = CAT_ICONS[id] || 'package';
     const count = getCount(id, name);
-    html += `<div class="category-card ${activeCategory === id ? 'active' : ''}" onclick="filterCategory('${id}')">
-      <span class="category-card-icon"><i data-lucide="${iconName}"></i></span>
-      <div class="category-card-name">${escapeHtml(name)}</div>
-      <div class="category-card-count">${count} items</div>
-    </div>`;
+    const isActive = pendingCategory === id;
+    html += `<button class="filter-option ${isActive ? 'active' : ''}" onclick="selectCategory('${id}', this)">
+      <i data-lucide="${iconName}" width="16" height="16"></i>
+      ${escapeHtml(name)} <span style="margin-left:auto;color:var(--white-dim);font-size:0.75rem;">${count}</span>
+    </button>`;
   });
-  grid.innerHTML = html;
+  catOptions.innerHTML = html;
   if (window.lucide) lucide.createIcons();
+  updateFilterBadge();
 }
+
+function openFilterModal() {
+  pendingSort = activeSort;
+  pendingCategory = activeCategory;
+  renderCategories();
+  // Sync sort options
+  document.querySelectorAll('#sortOptions .filter-option').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.sort === pendingSort);
+  });
+  document.getElementById('filterBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeFilterModal() {
+  document.getElementById('filterBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function selectSort(btn) {
+  pendingSort = btn.dataset.sort;
+  document.querySelectorAll('#sortOptions .filter-option').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function selectCategory(id, btn) {
+  pendingCategory = id;
+  document.querySelectorAll('#categoryOptions .filter-option').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function applyFilters() {
+  activeSort = pendingSort;
+  activeCategory = pendingCategory;
+  closeFilterModal();
+  renderProducts();
+  updateFilterBadge();
+}
+function clearFilters() {
+  pendingSort = 'newest';
+  pendingCategory = null;
+  document.querySelectorAll('#sortOptions .filter-option').forEach(b =>
+    b.classList.toggle('active', b.dataset.sort === 'newest'));
+  document.querySelectorAll('#categoryOptions .filter-option').forEach((b, i) =>
+    b.classList.toggle('active', i === 0));
+}
+function updateFilterBadge() {
+  const badge = document.getElementById('filterBadge');
+  const btn = document.querySelector('.filter-btn');
+  const hasFilter = activeCategory !== null || activeSort !== 'newest';
+  if (badge) badge.style.display = hasFilter ? 'flex' : 'none';
+  if (btn) btn.classList.toggle('has-filter', hasFilter);
+}
+
 function filterCategory(catId) {
   activeCategory = catId;
   renderCategories();
@@ -977,8 +1117,9 @@ function onSearch() {
 function renderProducts() {
   const grid = document.getElementById('productGrid');
   const countEl = document.getElementById('resultsCount');
-  const sort = document.getElementById('sortSelect').value;
+  const sort = activeSort;
   let list = Object.entries(allProducts).map(([id, p]) => ({ id, ...p }));
+
   if (activeCategory) list = list.filter(p =>
     String(p.category || '').toLowerCase().trim() === String(activeCategory).toLowerCase().trim() ||
     String(p.category || '').toLowerCase().trim() === String(allCategories[activeCategory] || activeCategory).toLowerCase().trim()
@@ -986,27 +1127,51 @@ function renderProducts() {
   if (searchTerm) list = list.filter(p =>
     (p.name || '').toLowerCase().includes(searchTerm) ||
     (p.description || '').toLowerCase().includes(searchTerm));
+
   if (sort === 'price-low') list.sort((a, b) => (a.price || 0) - (b.price || 0));
   else if (sort === 'price-high') list.sort((a, b) => (b.price || 0) - (a.price || 0));
   else list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
   countEl.textContent = `${list.length} product${list.length === 1 ? '' : 's'} found`;
+
   if (list.length === 0) {
     grid.innerHTML = `<div class="empty-state"><h3 class="empty-title">No products found</h3><p class="empty-desc">Try a different category or search term.</p></div>`;
     return;
   }
-  grid.innerHTML = list.map(p => {
-    const img = (p.images && p.images[0]) ? p.images[0] : '';
-    const inStock = p.inStock !== false;
-    return `<div class="product-card" onclick="openDetail('${p.id}')">
-      ${img ? `<img class="product-card-img" src="${img}" alt="${escapeHtml(p.name)}">` : `<div class="product-card-img"></div>`}
-      <div class="product-card-body">
-        <span class="product-card-cat">${escapeHtml(catName(p.category))}</span>
-        <div class="product-card-name">${escapeHtml(p.name)}</div>
-        <span class="stock-badge ${inStock ? 'in' : 'out'}">${inStock ? '● In Stock' : '● Out of Stock'}</span>
-        <div class="product-card-price">${formatNaira(p.price)}</div>
-      </div>
-    </div>`;
-  }).join('');
+
+  // Group by category when no specific category filter is active
+  if (!activeCategory && !searchTerm && sort === 'newest') {
+    const groups = {};
+    const groupOrder = [];
+    list.forEach(p => {
+      const cat = String(p.category || 'Other').trim();
+      const catKey = cat.toLowerCase();
+      if (!groups[catKey]) { groups[catKey] = { label: cat, items: [] }; groupOrder.push(catKey); }
+      groups[catKey].items.push(p);
+    });
+    grid.innerHTML = groupOrder.map(catKey => {
+      const g = groups[catKey];
+      return `<div class="product-group" style="grid-column:1/-1;">
+        <div class="product-group-title">${escapeHtml(catName(catKey) || g.label)}</div>
+      </div>` + g.items.map(p => renderProductCard(p)).join('');
+    }).join('');
+  } else {
+    grid.innerHTML = list.map(p => renderProductCard(p)).join('');
+  }
+}
+
+function renderProductCard(p) {
+  const img = (p.images && p.images[0]) ? p.images[0] : '';
+  const inStock = p.inStock !== false;
+  return `<div class="product-card" onclick="openDetail('${p.id}')">
+    ${img ? `<img class="product-card-img" src="${img}" alt="${escapeHtml(p.name)}">` : `<div class="product-card-img"></div>`}
+    <div class="product-card-body">
+      <span class="product-card-cat">${escapeHtml(catName(p.category))}</span>
+      <div class="product-card-name">${escapeHtml(p.name)}</div>
+      <span class="stock-badge ${inStock ? 'in' : 'out'}">${inStock ? '● In Stock' : '● Out of Stock'}</span>
+      <div class="product-card-price">${formatNaira(p.price)}</div>
+    </div>
+  </div>`;
 }
 function catName(catId) {
   const merged = Object.fromEntries(DEFAULT_CATEGORIES.map(c => [c.id, c.name]));
