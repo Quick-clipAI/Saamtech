@@ -952,6 +952,7 @@ firebase.auth().onAuthStateChanged((user) => {
 // ===== VIEW SWITCHING =====
 const VIEWS = ['browse', 'checkout', 'orders', 'profile'];
 function switchView(view) {
+  closeCart();
   document.getElementById('viewBrowse').style.display     = view === 'browse'   ? 'block' : 'none';
   document.getElementById('viewCheckout').style.display   = view === 'checkout' ? 'block' : 'none';
   document.getElementById('viewOrders').style.display     = view === 'orders'   ? 'block' : 'none';
