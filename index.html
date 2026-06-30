@@ -119,7 +119,14 @@
   .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: 0.3s; }
 
   .hero { position: relative; height: 100vh; min-height: 600px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--navy); }
-  .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 1; }
+  .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 1; transition: opacity 1.2s ease; }
+  .hero-slideshow { position: absolute; inset: 0; z-index: 0; }
+  .hero-slide {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    background-size: cover; background-position: center;
+    opacity: 0; transition: opacity 1.8s ease-in-out;
+  }
+  .hero-slide.active { opacity: 1; }
   .hero-overlay { position: absolute; inset: 0; z-index: 2; background: linear-gradient(135deg, rgba(5,13,26,0.88) 0%, rgba(5,13,26,0.55) 50%, rgba(0,30,60,0.72) 100%); }
   .hero-content { position: relative; z-index: 3; text-align: center; padding: 0 24px; max-width: 920px; }
   .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border: 1px solid var(--border); border-radius: 100px; background: var(--cyan-glow2); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cyan); margin-bottom: 24px; backdrop-filter: blur(8px); }
@@ -410,7 +417,14 @@
 </nav>
 
 <div class="hero">
-  <video class="hero-video-bg" autoplay muted loop playsinline>
+  <div class="hero-slideshow" id="heroSlideshow">
+    <div class="hero-slide active" style="background-image:url('assets/img/install1_web.jpg');"></div>
+    <div class="hero-slide" style="background-image:url('assets/img/solar1_web.jpg');"></div>
+    <div class="hero-slide" style="background-image:url('assets/img/tech1_web.jpg');"></div>
+    <div class="hero-slide" style="background-image:url('assets/img/battery1_web.jpg');"></div>
+    <div class="hero-slide" style="background-image:url('assets/img/install2_web.jpg');"></div>
+  </div>
+  <video class="hero-video-bg" id="heroVideoBg" autoplay muted loop playsinline style="opacity:0;">
     <source src="assets/video/promo-reel.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
@@ -905,6 +919,29 @@ function generateThumbnail(cell) {
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.video-cell').forEach(cell => generateThumbnail(cell));
   if (window.lucide) lucide.createIcons();
+
+  // HERO SLIDESHOW: cycle background images with crossfade
+  const slides = document.querySelectorAll('.hero-slide');
+  let currentSlide = 0;
+  if (slides.length > 1) {
+    setInterval(() => {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }, 4500);
+  }
+
+  // HERO VIDEO: once the promo video can actually play, crossfade it in over the slideshow
+  const heroVideo = document.getElementById('heroVideoBg');
+  if (heroVideo) {
+    heroVideo.addEventListener('canplay', () => {
+      heroVideo.style.opacity = '1';
+    });
+    // Safety: if video never loads (404 etc), keep the slideshow visible permanently
+    heroVideo.addEventListener('error', () => {
+      heroVideo.style.display = 'none';
+    });
+  }
 });
 
 
