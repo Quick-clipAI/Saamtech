@@ -18,8 +18,29 @@
       ".write": true,
       "$orderId": {
         ".read": "auth != null && (data.child('uid').val() === auth.uid || auth.uid === 'hXXxO9YqEXhj9J68l89QfA29bDr1' || auth.uid === 'RPRVT8L7AJOSVfF86ap0Zaud6042')",
-        ".validate": "newData.hasChildren(['customerName','phone','address','items','status','createdAt']) && newData.child('customerName').isString() && newData.child('phone').isString() && newData.child('address').isString() && newData.child('status').val() === 'pending'"
+        ".validate": "newData.hasChildren(['customerName','phone','address','items','status','createdAt']) && newData.child('customerName').isString() && newData.child('phone').isString() && newData.child('address').isString() && (newData.child('status').val() === 'pending' || newData.child('status').val() === 'processing' || newData.child('status').val() === 'shipped' || newData.child('status').val() === 'delivered' || newData.child('status').val() === 'cancelled')"
       }
+    },
+
+    "complaints": {
+      ".read": "auth != null && (auth.uid === 'hXXxO9YqEXhj9J68l89QfA29bDr1' || auth.uid === 'RPRVT8L7AJOSVfF86ap0Zaud6042')",
+      ".write": true,
+      "$complaintId": {
+        ".read": "auth != null && (data.child('uid').val() === auth.uid || auth.uid === 'hXXxO9YqEXhj9J68l89QfA29bDr1' || auth.uid === 'RPRVT8L7AJOSVfF86ap0Zaud6042')",
+        ".validate": "newData.hasChildren(['name','uid','createdAt'])",
+        "messages": {
+          "$msgId": {
+            ".read": "auth != null && (root.child('complaints').child($complaintId).child('uid').val() === auth.uid || auth.uid === 'hXXxO9YqEXhj9J68l89QfA29bDr1' || auth.uid === 'RPRVT8L7AJOSVfF86ap0Zaud6042')",
+            ".write": "auth != null && (root.child('complaints').child($complaintId).child('uid').val() === auth.uid || auth.uid === 'hXXxO9YqEXhj9J68l89QfA29bDr1' || auth.uid === 'RPRVT8L7AJOSVfF86ap0Zaud6042')",
+            ".validate": "newData.hasChildren(['from','text','createdAt']) && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 1000"
+          }
+        }
+      }
+    },
+
+    "terms": {
+      ".read": true,
+      ".write": "auth != null && (auth.uid === 'hXXxO9YqEXhj9J68l89QfA29bDr1' || auth.uid === 'RPRVT8L7AJOSVfF86ap0Zaud6042')"
     },
 
     "reviews": {

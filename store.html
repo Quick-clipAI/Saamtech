@@ -330,6 +330,56 @@
     .float-cart-bar { display: none !important; }
   }
 
+  /* ===== CHAT ROOM ===== */
+  .chat-wrap { display:flex; flex-direction:column; height:100%; }
+  .chat-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; min-height:200px; max-height:calc(88vh - 180px); }
+  .chat-bubble { max-width:82%; padding:10px 14px; border-radius:14px; font-size:0.84rem; line-height:1.5; }
+  .chat-bubble.customer { align-self:flex-end; background:rgba(0,200,248,0.15); border:1px solid rgba(0,200,248,0.25); border-bottom-right-radius:4px; }
+  .chat-bubble.admin { align-self:flex-start; background:var(--navy3); border:1px solid var(--border); border-bottom-left-radius:4px; }
+  .chat-bubble-name { font-size:0.68rem; font-weight:700; margin-bottom:3px; color:var(--cyan); }
+  .chat-bubble.admin .chat-bubble-name { color:#f4a261; }
+  .chat-bubble-time { font-size:0.62rem; color:var(--white-dim); margin-top:4px; text-align:right; }
+  .chat-input-row { display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--border); align-items:flex-end; flex-shrink:0; }
+  .chat-input { flex:1; background:var(--navy3); border:1px solid var(--border); border-radius:10px; color:var(--white); font-family:'Inter',sans-serif; font-size:0.85rem; padding:10px 14px; outline:none; resize:none; max-height:100px; min-height:40px; }
+  .chat-send-btn { padding:10px 16px; background:var(--cyan); color:var(--navy); border:none; border-radius:10px; font-weight:700; font-size:0.8rem; cursor:pointer; flex-shrink:0; }
+  .ticket-list { padding:16px; display:flex; flex-direction:column; gap:10px; }
+  .ticket-card { background:var(--navy3); border:1px solid var(--border); border-radius:12px; padding:14px; cursor:pointer; transition:border-color 0.2s; }
+  .ticket-card:hover { border-color:var(--cyan); }
+  .ticket-card-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .ticket-card-title { font-weight:700; font-size:0.85rem; }
+  .ticket-card-date { font-size:0.7rem; color:var(--white-dim); }
+  .ticket-card-preview { font-size:0.78rem; color:var(--white-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ticket-unread { display:inline-block; background:var(--cyan); color:var(--navy); font-size:0.6rem; font-weight:800; padding:2px 6px; border-radius:10px; margin-left:6px; }
+  .ticket-new-btn { display:flex; align-items:center; justify-content:center; gap:8px; padding:13px; background:rgba(0,200,248,0.08); border:1px dashed rgba(0,200,248,0.4); border-radius:12px; color:var(--cyan); font-weight:700; font-size:0.85rem; cursor:pointer; margin-top:4px; }
+
+  /* ===== STORE MODALS (order detail, support, terms) ===== */
+  .store-modal-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.78); backdrop-filter: blur(6px);
+    z-index: 7000; display: none; align-items: flex-end; justify-content: center;
+  }
+  .store-modal-backdrop.open { display: flex; }
+  .store-modal-panel {
+    background: var(--navy2); border-radius: 20px 20px 0 0; width: 100%; max-width: 600px;
+    max-height: 88vh; display: flex; flex-direction: column;
+    border-top: 1px solid var(--border); animation: slideUp 0.28s cubic-bezier(.32,1.2,.5,1);
+  }
+  .store-modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .store-modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700; }
+  .store-modal-close { background: none; border: none; color: var(--white-dim); font-size: 1.1rem; cursor: pointer; padding: 4px 8px; }
+  .store-modal-body { padding: 18px 20px 32px; overflow-y: auto; flex: 1; }
+  /* ORDER TRACKING */
+  .order-track { display: flex; align-items: center; padding: 12px 0; }
+  .track-step { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .track-dot { width: 36px; height: 36px; border-radius: 50%; background: var(--navy3); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1rem; margin-bottom: 6px; }
+  .track-step.done .track-dot { border-color: var(--cyan); background: rgba(0,200,248,0.1); }
+  .track-step.active .track-dot { border-color: var(--cyan); background: rgba(0,200,248,0.2); box-shadow: 0 0 12px rgba(0,200,248,0.3); }
+  .track-label { font-size: 0.58rem; font-weight: 700; text-align: center; color: var(--white-dim); text-transform: uppercase; letter-spacing: 0.03em; }
+  .track-step.done .track-label, .track-step.active .track-label { color: var(--cyan); }
+  .track-line { flex: 1; height: 2px; background: var(--border); margin-bottom: 22px; }
+
   /* ===== BOTTOM NAV (coded-games pattern) ===== */
   .bnav {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
@@ -681,6 +731,12 @@
       <h3 class="empty-title">Loading products&hellip;</h3>
     </div>
   </div>
+  <div style="text-align:center;padding:20px 20px 80px;font-size:0.74rem;color:var(--white-dim);">
+    <a href="#" onclick="openTermsModal();return false;" style="color:var(--cyan);opacity:0.8;text-decoration:none;">Terms &amp; Conditions</a>
+    &nbsp;&middot;&nbsp;
+    <a href="#" onclick="openSupportModal(null);return false;" style="color:var(--cyan);opacity:0.8;text-decoration:none;">Customer Support</a>
+    &nbsp;&middot;&nbsp; &copy; 2026 Sahaamtec Technology
+  </div>
 </div>
 
 <!-- ===== FILTER MODAL ===== -->
@@ -811,6 +867,44 @@
   <div class="auth-panel" id="authPanel">
     <button class="auth-close" id="authClose" onclick="closeAuthModal()">&#x2715;</button>
     <div id="authContent"></div>
+  </div>
+</div>
+
+<!-- ===== ORDER DETAIL MODAL ===== -->
+<div class="store-modal-backdrop" id="orderDetailModal" onclick="if(event.target===this)closeOrderDetail()">
+  <div class="store-modal-panel">
+    <div class="store-modal-header">
+      <span class="store-modal-title">Order Details</span>
+      <button class="store-modal-close" onclick="closeOrderDetail()">&#x2715;</button>
+    </div>
+    <div class="store-modal-body" id="orderDetailBody"></div>
+  </div>
+</div>
+
+<!-- ===== SUPPORT MODAL (chat room) ===== -->
+<div class="store-modal-backdrop" id="supportModal" onclick="if(event.target===this)closeSupportModal()">
+  <div class="store-modal-panel" style="max-height:92vh;">
+    <div class="store-modal-header">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <span class="store-modal-title" id="supportModalTitle">🎧 Customer Support</span>
+        <span style="font-size:0.7rem;color:var(--white-dim);" id="supportModalSub"></span>
+      </div>
+      <button class="store-modal-close" onclick="closeSupportModal()">&#x2715;</button>
+    </div>
+    <div class="store-modal-body" id="supportModalBody" style="padding:0;display:flex;flex-direction:column;height:100%;">
+      <!-- populated by JS: ticket list, new ticket form, or chat view -->
+    </div>
+  </div>
+</div>
+
+<!-- ===== TERMS MODAL ===== -->
+<div class="store-modal-backdrop" id="termsModal" onclick="if(event.target===this)closeTermsModal()">
+  <div class="store-modal-panel">
+    <div class="store-modal-header">
+      <span class="store-modal-title">Terms &amp; Conditions</span>
+      <button class="store-modal-close" onclick="closeTermsModal()">&#x2715;</button>
+    </div>
+    <div class="store-modal-body" id="termsBody"></div>
   </div>
 </div>
 
@@ -1360,7 +1454,8 @@ function renderCheckout() {
     <div class="form-group"><label>Delivery Address</label><textarea id="co-address" placeholder="Full delivery address, including city and state"></textarea></div>
     <div class="form-group"><label>Delivery Notes (optional)</label><textarea id="co-notes" placeholder="Any special instructions..."></textarea></div>
     <button class="btn-place-order" id="placeOrderBtn" onclick="placeOrder()">Place Order &mdash; ${formatNaira(total)}</button>
-    <p style="text-align:center;margin-top:16px;"><a href="#" onclick="backToBrowse();return false;" style="color:var(--white-dim);font-size:0.85rem;">&larr; Back to shopping</a></p>`;
+    <p style="text-align:center;font-size:0.72rem;color:var(--white-dim);margin-top:10px;">By placing this order you agree to our <a href="#" onclick="openTermsModal();return false;" style="color:var(--cyan);">Terms &amp; Conditions</a>.</p>
+    <p style="text-align:center;margin-top:8px;"><a href="#" onclick="backToBrowse();return false;" style="color:var(--white-dim);font-size:0.85rem;">&larr; Back to shopping</a></p>`;
 }
 function placeOrder() {
   const name = document.getElementById('co-name').value.trim();
@@ -1441,6 +1536,24 @@ function renderProfile() {
             </div>
           </div>
           <button class="profile-row-action" onclick="openRating()">Rate Us</button>
+        </div>
+        <div class="profile-row" style="cursor:pointer;" onclick="openSupportModal(null)">
+          <div class="profile-row-left">
+            <div class="profile-row-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </div>
+            <div><div class="profile-row-label">Customer Support</div><div class="profile-row-sub">Log a complaint</div></div>
+          </div>
+          <button class="profile-row-action" onclick="openSupportModal(null)">Contact</button>
+        </div>
+        <div class="profile-row" style="cursor:pointer;" onclick="openTermsModal()">
+          <div class="profile-row-left">
+            <div class="profile-row-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+            </div>
+            <div><div class="profile-row-label">Terms &amp; Conditions</div></div>
+          </div>
+          <button class="profile-row-action" onclick="openTermsModal()">Read</button>
         </div>
       </div>`;
   } else {
@@ -1567,6 +1680,27 @@ function renderProfile() {
       </div>
 
       <div class="profile-card">
+        <div class="profile-row" style="cursor:pointer;" onclick="openSupportModal(null)">
+          <div class="profile-row-left">
+            <div class="profile-row-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </div>
+            <div><div class="profile-row-label">Customer Support</div><div class="profile-row-sub">Log a complaint</div></div>
+          </div>
+          <button class="profile-row-action" onclick="openSupportModal(null)">Contact</button>
+        </div>
+        <div class="profile-row" style="cursor:pointer;" onclick="openTermsModal()">
+          <div class="profile-row-left">
+            <div class="profile-row-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
+            <div><div class="profile-row-label">Terms &amp; Conditions</div></div>
+          </div>
+          <button class="profile-row-action" onclick="openTermsModal()">Read</button>
+        </div>
+      </div>
+
+      <div class="profile-card">
         <div class="profile-row" style="cursor:pointer;" onclick="signOut()">
           <div class="profile-row-left">
             <div class="profile-row-icon">
@@ -1689,8 +1823,8 @@ function renderOrders() {
       .map(([id, o]) => ({ id, ...o }))
       .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-    const statusColors = { pending: '#f4a261', confirmed: '#2bb673', delivered: '#2bb673', cancelled: '#e63946' };
-    const statusLabels = { pending: 'Pending', confirmed: 'Confirmed', delivered: 'Delivered', cancelled: 'Cancelled' };
+    const statusColors = { pending: '#f4a261', processing: '#00c8f8', shipped: '#9b7bff', delivered: '#2bb673', cancelled: '#e63946' };
+    const statusLabels = { pending: 'Pending', processing: 'Processing', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled' };
 
     listWrap.innerHTML = orders.map(o => {
       const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric' }) : 'Unknown date';
@@ -1698,15 +1832,18 @@ function renderOrders() {
       const statusColor = statusColors[o.status] || '#aaa';
       const statusLabel = statusLabels[o.status] || (o.status || 'Pending');
       return `
-        <div class="order-card">
+        <div class="order-card" onclick="openOrderDetail('${o.id}')" style="cursor:pointer;">
           <div class="order-card-header">
             <div>
               <div class="order-card-date">${date}</div>
               <div class="order-card-total">${formatNaira(total)}</div>
             </div>
-            <span class="order-status-badge" style="background:${statusColor}22;color:${statusColor};border:1px solid ${statusColor}44;">
-              ${statusLabel}
-            </span>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+              <span class="order-status-badge" style="background:${statusColor}22;color:${statusColor};border:1px solid ${statusColor}44;">
+                ${statusLabel}
+              </span>
+              <span style="font-size:0.68rem;color:var(--white-dim);">Tap for details →</span>
+            </div>
           </div>
           <div class="order-card-items">
             ${(o.items || []).map(i => `<div class="order-item-row"><span>${escapeHtml(i.name)} &times; ${i.qty}</span><span>${formatNaira(i.price * i.qty)}</span></div>`).join('')}
@@ -1722,6 +1859,280 @@ function renderOrders() {
   });
 }
 
+// ===== ORDER DETAIL MODAL =====
+let allOrdersCache = {};
+function openOrderDetail(orderId) {
+  if (!currentUser || !window.firebaseDb) return;
+  const modal = document.getElementById('orderDetailModal');
+  const body = document.getElementById('orderDetailBody');
+  body.innerHTML = '<div style="text-align:center;padding:32px;color:var(--white-dim);">Loading…</div>';
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  window.firebaseDb.ref('orders/' + orderId).once('value', snap => {
+    const o = snap.val();
+    if (!o) { body.innerHTML = '<p style="color:#e63946;">Order not found.</p>'; return; }
+    allOrdersCache[orderId] = o;
+
+    const statusColors = { pending: '#f4a261', processing: '#00c8f8', shipped: '#9b7bff', delivered: '#2bb673', cancelled: '#e63946' };
+    const statusLabels = { pending: 'Pending', processing: 'Processing', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled' };
+    const steps = ['pending','processing','shipped','delivered'];
+    const currentIdx = steps.indexOf(o.status);
+    const total = (o.items || []).reduce((s, i) => s + (i.price * i.qty), 0);
+    const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-NG', { day:'numeric', month:'long', year:'numeric' }) : '';
+    const statusColor = statusColors[o.status] || '#aaa';
+    const statusLabel = statusLabels[o.status] || o.status || 'Pending';
+
+    const trackingSteps = o.status === 'cancelled' ? [] : steps;
+    const trackingHtml = o.status === 'cancelled'
+      ? `<div style="background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.3);border-radius:10px;padding:12px 16px;color:#e63946;font-size:0.85rem;text-align:center;">❌ This order was cancelled.</div>`
+      : `<div class="order-track">${steps.map((s, i) => {
+          const done = i <= currentIdx;
+          const active = i === currentIdx;
+          const icons = { pending:'🕐', processing:'⚙️', shipped:'🚚', delivered:'✅' };
+          const labels = { pending:'Order Placed', processing:'Being Prepared', shipped:'On the Way', delivered:'Delivered' };
+          return `<div class="track-step ${done ? 'done' : ''} ${active ? 'active' : ''}">
+            <div class="track-dot">${icons[s]}</div>
+            <div class="track-label">${labels[s]}</div>
+          </div>`;
+        }).join('<div class="track-line"></div>')}</div>`;
+
+    body.innerHTML = `
+      <div style="padding:4px 0 16px;border-bottom:1px solid var(--border);margin-bottom:16px;">
+        <div style="font-size:0.72rem;color:var(--white-dim);margin-bottom:4px;">ORDER ID</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:700;letter-spacing:0.08em;color:var(--cyan);">#${orderId.toUpperCase()}</div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:0.7rem;color:var(--white-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Tracking</div>
+        ${trackingHtml}
+      </div>
+      <div style="margin-bottom:16px;border-top:1px solid var(--border);padding-top:14px;">
+        <div style="font-size:0.7rem;color:var(--white-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Items</div>
+        ${(o.items || []).map(i => `<div style="display:flex;justify-content:space-between;font-size:0.83rem;padding:5px 0;border-bottom:1px solid var(--border);"><span>${escapeHtml(i.name)} × ${i.qty}</span><span>${formatNaira(i.price * i.qty)}</span></div>`).join('')}
+        <div style="display:flex;justify-content:space-between;font-size:0.9rem;font-weight:700;padding-top:10px;"><span>Total</span><span>${formatNaira(total)}</span></div>
+      </div>
+      <div style="margin-bottom:16px;border-top:1px solid var(--border);padding-top:14px;">
+        <div style="font-size:0.7rem;color:var(--white-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Delivery Details</div>
+        <div style="font-size:0.83rem;color:var(--white-dim);line-height:1.6;">
+          📍 ${escapeHtml(o.address || 'N/A')}<br>
+          👤 ${escapeHtml(o.customerName || 'N/A')}<br>
+          📞 ${escapeHtml(o.phone || 'N/A')}<br>
+          🗓 ${date}
+        </div>
+      </div>
+      ${o.status === 'pending' ? `<div style="margin-bottom:12px;">
+        <button onclick="cancelMyOrder('${orderId}')" style="width:100%;padding:11px;background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.3);border-radius:10px;color:#e63946;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;">✕ Cancel This Order</button>
+      </div>` : ''}
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <button onclick="openSupportModal('${orderId}')" style="flex:1;padding:11px;background:none;border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:'Inter',sans-serif;font-size:0.82rem;cursor:pointer;">🎧 Get Support</button>
+        <a href="https://wa.me/2348060293825?text=${encodeURIComponent('Hello Sahaamtec! I need help with order #' + orderId)}" target="_blank" style="flex:1;padding:11px;background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);border-radius:10px;color:#25d366;font-family:\'Inter\',sans-serif;font-size:0.82rem;cursor:pointer;text-align:center;text-decoration:none;">💬 WhatsApp</a>
+      </div>`;
+  });
+}
+function cancelMyOrder(orderId) {
+  if (!window.firebaseDb || !currentUser) return;
+  window.firebaseDb.ref('orders/' + orderId + '/status').set('cancelled').then(() => {
+    openOrderDetail(orderId);
+    renderOrders();
+  }).catch(() => {});
+}
+function closeOrderDetail() {
+  document.getElementById('orderDetailModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ===== CUSTOMER SUPPORT CHAT ROOM =====
+let activeChatId = null;
+let chatListener = null;
+
+function openSupportModal(orderId) {
+  document.getElementById('supportModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (currentUser) {
+    showTicketList(orderId);
+  } else {
+    showNewTicketForm(orderId);
+  }
+}
+function closeSupportModal() {
+  document.getElementById('supportModal').classList.remove('open');
+  document.body.style.overflow = '';
+  if (chatListener && activeChatId && window.firebaseDb) {
+    window.firebaseDb.ref('complaints/' + activeChatId + '/messages').off('value', chatListener);
+  }
+  chatListener = null; activeChatId = null;
+}
+
+function showTicketList(presetOrderId) {
+  const title = document.getElementById('supportModalTitle');
+  const sub = document.getElementById('supportModalSub');
+  const body = document.getElementById('supportModalBody');
+  title.textContent = '🎧 Support Tickets';
+  sub.textContent = '';
+  body.innerHTML = '<div style="padding:24px;text-align:center;color:var(--white-dim);font-size:0.85rem;">Loading tickets…</div>';
+  if (!window.firebaseDb || !currentUser) { showNewTicketForm(presetOrderId); return; }
+  window.firebaseDb.ref('complaints').orderByChild('uid').equalTo(currentUser.uid).once('value', snap => {
+    const data = snap.val();
+    const tickets = data ? Object.entries(data).map(([id, t]) => ({ id, ...t })).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)) : [];
+    let html = '<div class="ticket-list">';
+    html += `<div class="ticket-new-btn" onclick="showNewTicketForm(${presetOrderId ? "'" + presetOrderId + "'" : 'null'})">+ New Support Ticket</div>`;
+    if (tickets.length === 0) {
+      html += '<div style="text-align:center;color:var(--white-dim);font-size:0.83rem;padding:16px 0;">No tickets yet. Create one above.</div>';
+    } else {
+      html += tickets.map(t => {
+        const date = t.createdAt ? new Date(t.createdAt).toLocaleDateString('en-NG', { day:'numeric', month:'short' }) : '';
+        const preview = t.subject || (t.messages ? 'View conversation' : 'Tap to view');
+        const hasUnread = t.hasAdminReply && !t.customerRead;
+        return `<div class="ticket-card" onclick="openChatRoom('${t.id}')">
+          <div class="ticket-card-top">
+            <span class="ticket-card-title">${t.orderId ? 'Order #' + escapeHtml(t.orderId.toUpperCase()) : 'General Complaint'}${hasUnread ? '<span class="ticket-unread">New Reply</span>' : ''}</span>
+            <span class="ticket-card-date">${date}</span>
+          </div>
+          <div class="ticket-card-preview">${escapeHtml(t.subject || 'Tap to view conversation →')}</div>
+        </div>`;
+      }).join('');
+    }
+    html += '</div>';
+    body.innerHTML = html;
+  }, () => { showNewTicketForm(presetOrderId); });
+}
+
+function showNewTicketForm(orderId) {
+  const title = document.getElementById('supportModalTitle');
+  const sub = document.getElementById('supportModalSub');
+  const body = document.getElementById('supportModalBody');
+  title.textContent = '🎧 New Support Ticket';
+  sub.textContent = orderId ? 'For order #' + orderId.toUpperCase() : '';
+  body.innerHTML = `
+    <div style="padding:18px 18px 0;">
+      ${currentUser ? `<button onclick="showTicketList(null)" style="background:none;border:none;color:var(--cyan);font-size:0.8rem;cursor:pointer;padding:0 0 12px;">← My Tickets</button>` : ''}
+      <p style="font-size:0.83rem;color:var(--white-dim);margin-bottom:14px;">Describe your issue. We'll reply directly here on the site.</p>
+      ${orderId ? `<div style="font-size:0.75rem;color:var(--cyan);font-weight:700;margin-bottom:12px;">📦 Linked to order #${escapeHtml(orderId.toUpperCase())}</div>` : ''}
+      <div class="rating-field" style="margin-bottom:10px;">
+        <label>Subject</label>
+        <input type="text" id="ticketSubject" maxlength="100" placeholder="Brief description of your issue" style="width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:'Inter',sans-serif;font-size:0.85rem;padding:10px 14px;outline:none;">
+      </div>
+      <div class="rating-field" style="margin-bottom:4px;">
+        <label>Your message</label>
+        <textarea id="ticketMessage" maxlength="1000" rows="4" placeholder="Tell us what happened in detail…" style="width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:'Inter',sans-serif;font-size:0.85rem;padding:10px 14px;resize:vertical;outline:none;"></textarea>
+      </div>
+      <div id="ticketError" style="color:#e63946;font-size:0.78rem;min-height:18px;margin-bottom:6px;"></div>
+    </div>
+    <div style="padding:0 18px 24px;display:flex;gap:10px;">
+      <button id="ticketSubmitBtn" class="btn-rating-submit" style="margin:0;flex:2;" onclick="submitTicket('${orderId || ''}')">Send Message</button>
+      <a href="https://wa.me/2348060293825" target="_blank" style="flex:1;padding:12px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);border-radius:10px;color:#25d366;font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:700;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;">💬 WhatsApp</a>
+    </div>`;
+}
+
+function submitTicket(orderId) {
+  const subject = document.getElementById('ticketSubject').value.trim();
+  const msg = document.getElementById('ticketMessage').value.trim();
+  const err = document.getElementById('ticketError');
+  const btn = document.getElementById('ticketSubmitBtn');
+  if (!subject) { err.textContent = 'Please enter a subject.'; return; }
+  if (!msg) { err.textContent = 'Please describe your issue.'; return; }
+  if (!window.firebaseDb) { err.textContent = 'Service unavailable.'; return; }
+  err.textContent = ''; btn.disabled = true; btn.textContent = 'Sending…';
+  const name = currentUser ? (currentUser.displayName || currentUser.email) : document.getElementById('ticketName')?.value || 'Guest';
+  const phone = currentUser ? (localStorage.getItem('phone_' + currentUser.uid) || '') : '';
+  const complaint = {
+    name, phone, subject,
+    orderId: orderId || null,
+    uid: currentUser ? currentUser.uid : 'guest_' + Date.now(),
+    hasAdminReply: false,
+    customerRead: true,
+    createdAt: Date.now()
+  };
+  const ref = window.firebaseDb.ref('complaints').push();
+  ref.set(complaint).then(() => {
+    const firstMsg = { from: 'customer', text: msg, senderName: name, createdAt: Date.now() };
+    return window.firebaseDb.ref('complaints/' + ref.key + '/messages').push().set(firstMsg);
+  }).then(() => {
+    btn.disabled = false; btn.textContent = 'Send Message';
+    openChatRoom(ref.key);
+  }).catch(() => {
+    btn.disabled = false; btn.textContent = 'Send Message';
+    err.textContent = 'Failed to send. Please try again.';
+  });
+}
+
+function openChatRoom(complaintId) {
+  activeChatId = complaintId;
+  const title = document.getElementById('supportModalTitle');
+  const sub = document.getElementById('supportModalSub');
+  const body = document.getElementById('supportModalBody');
+  title.textContent = '🎧 Support Chat';
+  sub.textContent = 'Tap a message to copy · We reply within 24h';
+  body.innerHTML = `
+    <div class="chat-wrap">
+      <div style="padding:8px 16px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <button onclick="showTicketList(null)" style="background:none;border:none;color:var(--cyan);font-size:0.78rem;cursor:pointer;">← Back to tickets</button>
+      </div>
+      <div class="chat-messages" id="chatMessages"><div style="text-align:center;padding:24px;color:var(--white-dim);font-size:0.83rem;">Loading…</div></div>
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chatInput" rows="1" placeholder="Type your message…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMessage();}"></textarea>
+        <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
+      </div>
+    </div>`;
+
+  // Mark as read by customer
+  if (currentUser && window.firebaseDb) {
+    window.firebaseDb.ref('complaints/' + complaintId + '/customerRead').set(true);
+  }
+
+  // Real-time listener
+  if (chatListener) window.firebaseDb.ref('complaints/' + activeChatId + '/messages').off('value', chatListener);
+  chatListener = window.firebaseDb.ref('complaints/' + complaintId + '/messages')
+    .orderByChild('createdAt').on('value', snap => {
+      const msgs = document.getElementById('chatMessages');
+      if (!msgs) return;
+      const data = snap.val();
+      if (!data) { msgs.innerHTML = '<div style="text-align:center;padding:24px;color:var(--white-dim);font-size:0.83rem;">Start the conversation by sending a message below.</div>'; return; }
+      const list = Object.values(data).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+      msgs.innerHTML = list.map(m => {
+        const isCustomer = m.from === 'customer';
+        const time = m.createdAt ? new Date(m.createdAt).toLocaleTimeString('en-NG', { hour:'2-digit', minute:'2-digit' }) : '';
+        return `<div class="chat-bubble ${isCustomer ? 'customer' : 'admin'}">
+          <div class="chat-bubble-name">${isCustomer ? 'You' : '🛡 Sahaamtec Support'}</div>
+          <div>${escapeHtml(m.text)}</div>
+          <div class="chat-bubble-time">${time}</div>
+        </div>`;
+      }).join('');
+      msgs.scrollTop = msgs.scrollHeight;
+    });
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || !activeChatId || !window.firebaseDb) return;
+  const name = currentUser ? (currentUser.displayName || currentUser.email) : 'Customer';
+  const msg = { from: 'customer', text, senderName: name, createdAt: Date.now() };
+  input.value = '';
+  window.firebaseDb.ref('complaints/' + activeChatId + '/messages').push().set(msg).catch(() => {});
+  window.firebaseDb.ref('complaints/' + activeChatId + '/customerRead').set(true);
+}
+
+// ===== TERMS MODAL =====
+function openTermsModal() {
+  const modal = document.getElementById('termsModal');
+  const body = document.getElementById('termsBody');
+  body.innerHTML = '<div style="text-align:center;padding:24px;color:var(--white-dim);">Loading…</div>';
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (window.firebaseDb) {
+    window.firebaseDb.ref('terms').once('value', snap => {
+      const text = snap.val();
+      body.innerHTML = text
+        ? text.split('\n').map(l => l.trim() ? `<p style="margin-bottom:10px;font-size:0.85rem;line-height:1.7;color:var(--white-dim);">${escapeHtml(l)}</p>` : '<br>').join('')
+        : '<p style="color:var(--white-dim);font-size:0.85rem;">No terms have been published yet. Check back later.</p>';
+    });
+  }
+}
+function closeTermsModal() {
+  document.getElementById('termsModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
 // ===== AUTH MODAL =====
 // mode: 'login' | 'register' | 'reset'
 function openAuthModal(mode, subtitle) {
@@ -1771,6 +2182,7 @@ function renderAuthContent(mode, subtitle) {
         Keep me logged in
       </label>
       <button class="btn-auth-submit" id="authSubmitBtn" onclick="doRegister()">Create Account</button>
+      <p style="font-size:0.72rem;color:var(--white-dim);text-align:center;margin-top:10px;">By creating an account you agree to our <a href="#" onclick="openTermsModal();return false;" style="color:var(--cyan);">Terms &amp; Conditions</a>.</p>
       <div class="auth-switch">Already have an account? <span onclick="renderAuthContent('login')">Sign in</span></div>`;
   } else if (mode === 'reset') {
     content.innerHTML = `
